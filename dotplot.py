@@ -11,4 +11,11 @@ def read_lines(filename):
 
 def get_sequence(lines):
     """ Returns first sequence from list of file lines (lines), based on FASTA format """
-    pass
+    sequence = ''
+    for line in lines[1:]:
+        if line[0] == '>':
+            break
+        else:
+            sequence += line
+    return sequence
+
