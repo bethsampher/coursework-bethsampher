@@ -20,5 +20,17 @@ def get_sequence(lines):
     return sequence
 
 def get_matches(seq_a, seq_b):
-    """ Returns a list of lists of matches """
-    pass
+    """ Returns a list of lists of matches
+    TODO: improve docstring
+    """
+    rows = []
+    for base_a in seq_a:
+        row = []
+        for base_b in seq_b:
+            if base_a == base_b:
+                row.append(base_a)
+            else:
+                row.append('')
+        rows.append(row)
+    return rows
+
