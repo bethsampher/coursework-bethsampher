@@ -18,10 +18,31 @@ with patch('dotplot.read_lines', side_effect=mocked_read_lines) as read_lines:
         multiline_string = 'This is the first line\nThis is the second line\nThis is the third line'
         assert read_lines(multiline_string) == ['This is the first line', 'This is the second line', 'This is the third line']
 
-def test_get_sequence_short():
+def test_get_sequence_single():
     lines = ['>ID', 'ATCG']
     assert get_sequence(lines) == 'ATCG'
 
-def test_get_sequence_long():
+def test_get_sequence_with_concatenation():
     lines = ['>ID', 'ATCG', 'ATCGATCG', 'A']
     assert get_sequence(lines) == 'ATCGATCGATCGA'
+
+def test_get_matches():
+    seq_a = 'GGTCATTCAGGA'
+    seq_b = 'AGGATCAAAC'
+    assert get_matches(seq_a, seq_b) == [
+            ['', 'G', 'G', '', '', '', '', '', '', ''],
+            ['', 'G', 'G', '', '', '', '', '', '', ''],
+            ['', '', '', '', 'T', '', '', '', '', ''],
+            ['', '', '', '', '', 'C', '', '', '', ''],
+            ['A', '', '', 'A', '', '', 'A', 'A', 'A', ''],
+            ['', '', '', '', 'T', '', '', '', '', ''],
+            ['', '', '', '', 'T', '', '', '', '', ''],
+            ['', '', '', '', '', 'C', '', '', '', ''],
+            ['A', '', '', 'A', '', '', 'A', 'A', 'A', ''],
+            ['', 'G', 'G', '', '', '', '', '', '', ''],
+            ['', 'G', 'G', '', '', '', '', '', '', ''],
+            ['A', '', '', 'A', '', '', 'A', 'A', 'A', '']
+            ]
+
+
+    

@@ -19,3 +19,6 @@ def get_sequence(lines):
             sequence += line
     return sequence
 
+def get_matches(seq_a, seq_b):
+    """ Returns a list of lists of matches """
+    pass
