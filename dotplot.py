@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 TODO: write docstring
 """
@@ -30,7 +31,11 @@ def get_matches(seq_a, seq_b):
             if base_a == base_b:
                 row.append(base_a)
             else:
-                row.append('')
+                row.append(' ')
         rows.append(row)
     return rows
+
+def match_filter(match_table):
+    """ TODO: write docstring """
+    pass
 
