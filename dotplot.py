@@ -24,7 +24,7 @@ def get_matches(seq_a, seq_b):
     """ Returns a list of lists of matches
     TODO: improve docstring
     """
-    rows = []
+    table = []
     for base_a in seq_a:
         row = []
         for base_b in seq_b:
@@ -32,28 +32,34 @@ def get_matches(seq_a, seq_b):
                 row.append(base_a)
             else:
                 row.append(' ')
-        rows.append(row)
-    return rows
+        table.append(row)
+    return table
 
-def match_filter(match_table):
+def match_filter(table):
     """ TODO: write docstring """
-    for row_index, row in enumerate(match_table):
-        for base_index, base in enumerate(row):
-            if (row_index == 0) and (base_index + 1 == len(row)):
-                row[base_index] = base.lower()
-            elif (row_index + 1 == len(match_table)) and (base_index == 0):
-                row[base_index] = base.lower()
-            elif (row_index == 0) or (base_index == 0):
-                if match_table[row_index + 1][base_index + 1] == ' ':
-                    row[base_index] = base.lower()
-            elif (row_index + 1 == len(match_table)) or (base_index + 1 == len(row)):
-                if match_table[row_index - 1][base_index - 1] == ' ':
-                    row[base_index] = base.lower()
-            elif (match_table[row_index + 1][base_index + 1] == ' ') and (match_table[row_index - 1][base_index - 1] == ' '):
-                row[base_index] = base.lower()
-    return match_table
+    for row_index, row in enumerate(table):
+        for cell_index, cell in enumerate(row):
+            if (row_index == 0) and (cell_index + 1 == len(row)):
+                row[cell_index] = cell.lower()
+            elif (row_index + 1 == len(table)) and (cell_index == 0):
+                row[cell_index] = cell.lower()
+            elif (row_index == 0) or (cell_index == 0):
+                if table[row_index + 1][cell_index + 1] == ' ':
+                    row[cell_index] = cell.lower()
+            elif (row_index + 1 == len(table)) or (cell_index + 1 == len(row)):
+                if table[row_index - 1][cell_index - 1] == ' ':
+                    row[cell_index] = cell.lower()
+            elif (table[row_index + 1][cell_index + 1] == ' ') and (table[row_index - 1][cell_index - 1] == ' '):
+                row[cell_index] = cell.lower()
+    return table
 
-def ascii_switcher(match_table):
+def ascii_switcher(table):
     """TODO: write docstring """
-    pass
-
+    filtered_table = match_filter(table)
+    for row in filtered_table:
+        for cell_index, cell in enumerate(row):
+            if cell.strip().isupper():
+                row[cell_index] = '\\'
+            elif cell.strip().islower():
+                row[cell_index] = '.'
+    return filtered_table
