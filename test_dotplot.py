@@ -1,4 +1,4 @@
-from dotplot import *
+from dotplot import (read_lines, get_sequence, get_matches, filter_matches, ascii_filter, find_palindromes) 
 from unittest.mock import patch
 
 def mocked_read_lines(contents):

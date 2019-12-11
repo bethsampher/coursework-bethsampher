@@ -66,4 +66,20 @@ def ascii_filter(table):
 
 def find_palindromes(table):
     """ TODO: write docstring """
-    pass
+    ascii_table = ascii_filter(table)
+    for row_index, row in enumerate(ascii_table):
+        for cell_index, cell in enumerate(row):
+            if cell == '.':
+                if (row_index == 0) and (cell_index == 0):
+                    pass
+                elif (row_index + 1 == len(ascii_table)) and (cell_index + 1 == len(row)):
+                    pass
+                elif (row_index == 0) or (cell_index + 1 == len(row)):
+                    if ascii_table[row_index + 1][cell_index - 1] in ('.', '\\', '/'):
+                        row[cell_index] = '/'
+                elif (row_index + 1 == len(ascii_table)) or (cell_index == 0):
+                    if ascii_table[row_index - 1][cell_index + 1] in ('.', '\\', '/'):
+                        row[cell_index] = '/'
+                elif (ascii_table[row_index + 1][cell_index - 1] in ('.', '\\', '/')) or (ascii_table[row_index - 1][cell_index + 1] in ('.', '\\', '/')):
+                    row[cell_index] = '/'
+    return ascii_table
