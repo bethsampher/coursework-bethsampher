@@ -53,3 +53,7 @@ def match_filter(match_table):
                 row[base_index] = base.lower()
     return match_table
 
+def ascii_switcher(match_table):
+    """TODO: write docstring """
+    pass
+
