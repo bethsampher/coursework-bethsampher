@@ -1,35 +1,35 @@
-from dotplot import (read_lines, get_sequence, get_matches, filter_matches, ascii_filter, find_palindromes, find_complements) 
+from dotplot import (get_lines_from_file, get_sequence_from_fasta_lines, create_matches_table, filter_matches, ascii_filter, find_palindromes, create_complements_table) 
 from unittest.mock import patch
 
-def mocked_read_lines(contents):
+def mocked_get_lines_from_file(contents):
     lines = contents.splitlines()
     return lines
 
-with patch('dotplot.read_lines', side_effect=mocked_read_lines) as read_lines:
+with patch('dotplot.get_lines_from_file', side_effect=mocked_get_lines_from_file) as get_lines_from_file:
 
-    def test_read_lines_with_no_lines():
-        assert read_lines('') == []
+    def test_get_lines_from_file_with_no_lines():
+        assert get_lines_from_file('') == []
 
-    def test_read_lines_with_one_line():
+    def test_get_lines_from_file_with_one_line():
         one_line_string = 'This is the first line'
-        assert read_lines(one_line_string) == ['This is the first line']
+        assert get_lines_from_file(one_line_string) == ['This is the first line']
 
-    def test_read_lines_with_multiple_lines():
+    def test_get_lines_from_file_with_multiple_lines():
         multiline_string = 'This is the first line\nThis is the second line\nThis is the third line'
-        assert read_lines(multiline_string) == ['This is the first line', 'This is the second line', 'This is the third line']
+        assert get_lines_from_file(multiline_string) == ['This is the first line', 'This is the second line', 'This is the third line']
 
-def test_get_sequence_single():
+def test_get_sequence_from_fasta_lines_single():
     lines = ['>ID', 'ATCG']
-    assert get_sequence(lines) == 'ATCG'
+    assert get_sequence_from_fasta_lines(lines) == 'ATCG'
 
-def test_get_sequence_with_concatenation():
+def test_get_sequence_from_fasta_lines_with_concatenation():
     lines = ['>ID', 'ATCG', 'ATCGATCG', 'A']
-    assert get_sequence(lines) == 'ATCGATCGATCGA'
+    assert get_sequence_from_fasta_lines(lines) == 'ATCGATCGATCGA'
 
-def test_get_matches():
+def test_create_matches_table():
     seq_a = 'GGTCATTCAGGA'
     seq_b = 'AGGATCAAAC'
-    assert get_matches(seq_a, seq_b) == [
+    assert create_matches_table(seq_a, seq_b) == [
             [' ', 'G', 'G', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
             [' ', 'G', 'G', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
             [' ', ' ', ' ', ' ', 'T', ' ', ' ', ' ', ' ', ' '],
@@ -134,10 +134,10 @@ def test_find_palindromes():
             ['/', ' ', ' ', '\\', ' ', ' ', '.', '.', '.', ' ']
             ]
 
-def test_find_complements():
+def test_create_complements_table():
     seq_a = 'GGTCATTCAGGA'
     seq_b = 'AGGATCAAAC'
-    assert find_complements(seq_a, seq_b) == [
+    assert create_complements_table(seq_a, seq_b) == [
             [' ', ' ', ' ', ' ', ' ', '.', ' ', ' ', ' ', '.'],
             [' ', ' ', ' ', ' ', ' ', '\\', ' ', ' ', ' ', '/'],
             ['\\', ' ', ' ', '/', ' ', ' ', '\\', '.', '/', ' '],

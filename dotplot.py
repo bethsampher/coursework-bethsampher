@@ -3,14 +3,14 @@
 TODO: write docstring
 """
 
-def read_lines(filename):
+def get_lines_from_file(filename):
     """ Returns list of lines read from given file (filename) """
     with open(filename) as file:
         contents = file.read()
         lines = contents.splitlines()
     return lines
 
-def get_sequence(lines):
+def get_sequence_from_fasta_lines(lines):
     """ Returns first sequence from list of file lines (lines), based on FASTA format """
     sequence = ''
     for line in lines[1:]:
@@ -20,7 +20,7 @@ def get_sequence(lines):
             sequence += line
     return sequence
 
-def get_matches(seq_a, seq_b):
+def create_matches_table(seq_a, seq_b):
     """ Returns a list of lists of matches
     TODO: improve docstring
     """
@@ -84,6 +84,15 @@ def find_palindromes(table):
                     row[cell_index] = '/'
     return ascii_table
 
-def find_complements(seq_a, seq_b):
+def create_complements_table(seq_a, seq_b):
     """ TODO: write docstring """
-    pass
+    table = []
+    for base_a in seq_a:
+        row = []
+        for base_b in seq_b:
+            if ((base_a, base_b) in (('G', 'C'), ('C', 'G'))) or ((base_a, base_b) in (('A', 'T'), ('T', 'A'))):
+                row.append('C')
+            else:
+                row.append(' ')
+        table.append(row)
+    return find_palindromes(table)
