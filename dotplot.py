@@ -35,7 +35,7 @@ def get_matches(seq_a, seq_b):
         table.append(row)
     return table
 
-def match_filter(table):
+def filter_matches(table):
     """ TODO: write docstring """
     for row_index, row in enumerate(table):
         for cell_index, cell in enumerate(row):
@@ -53,9 +53,9 @@ def match_filter(table):
                 row[cell_index] = cell.lower()
     return table
 
-def ascii_switcher(table):
-    """TODO: write docstring """
-    filtered_table = match_filter(table)
+def ascii_filter(table):
+    """ TODO: write docstring """
+    filtered_table = filter_matches(table)
     for row in filtered_table:
         for cell_index, cell in enumerate(row):
             if cell.strip().isupper():
@@ -63,3 +63,7 @@ def ascii_switcher(table):
             elif cell.strip().islower():
                 row[cell_index] = '.'
     return filtered_table
+
+def find_palindromes(table):
+    """ TODO: write docstring """
+    pass
