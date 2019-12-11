@@ -37,5 +37,19 @@ def get_matches(seq_a, seq_b):
 
 def match_filter(match_table):
     """ TODO: write docstring """
-    pass
+    for row_index, row in enumerate(match_table):
+        for base_index, base in enumerate(row):
+            if (row_index == 0) and (base_index + 1 == len(row)):
+                row[base_index] = base.lower()
+            elif (row_index + 1 == len(match_table)) and (base_index == 0):
+                row[base_index] = base.lower()
+            elif (row_index == 0) or (base_index == 0):
+                if match_table[row_index + 1][base_index + 1] == ' ':
+                    row[base_index] = base.lower()
+            elif (row_index + 1 == len(match_table)) or (base_index + 1 == len(row)):
+                if match_table[row_index - 1][base_index - 1] == ' ':
+                    row[base_index] = base.lower()
+            elif (match_table[row_index + 1][base_index + 1] == ' ') and (match_table[row_index - 1][base_index - 1] == ' '):
+                row[base_index] = base.lower()
+    return match_table
 
