@@ -1,4 +1,4 @@
-from dotplot import (read_lines, get_sequence, get_matches, filter_matches, ascii_filter, find_palindromes) 
+from dotplot import (read_lines, get_sequence, get_matches, filter_matches, ascii_filter, find_palindromes, find_complements) 
 from unittest.mock import patch
 
 def mocked_read_lines(contents):
@@ -134,3 +134,20 @@ def test_find_palindromes():
             ['/', ' ', ' ', '\\', ' ', ' ', '.', '.', '.', ' ']
             ]
 
+def test_find_complements():
+    seq_a = 'GGTCATTCAGGA'
+    seq_b = 'AGGATCAAAC'
+    assert find_complements(seq_a, seq_b) == [
+            [' ', ' ', ' ', ' ', ' ', '.', ' ', ' ', ' ', '.'],
+            [' ', ' ', ' ', ' ', ' ', '\\', ' ', ' ', ' ', '/'],
+            ['\\', ' ', ' ', '/', ' ', ' ', '\\', '.', '/', ' '],
+            [' ', '\\', '/', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', '/', ' ', ' ', ' ', ' ', ' '],
+            ['.', ' ', ' ', '/', ' ', ' ', '\\', '\\', '/', ' '],
+            ['\\', ' ', ' ', '/', ' ', ' ', '/', '\\', '\\', ' '],
+            [' ', '\\', '/', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', '\\', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' ', '\\', ' ', ' ', ' ', '.'],
+            [' ', ' ', ' ', ' ', ' ', '/', ' ', ' ', ' ', '.'],
+            [' ', ' ', ' ', ' ', '/', ' ', ' ', ' ', ' ', ' '],
+            ]

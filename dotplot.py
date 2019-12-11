@@ -83,3 +83,7 @@ def find_palindromes(table):
                 elif (ascii_table[row_index + 1][cell_index - 1] in ('.', '\\', '/')) or (ascii_table[row_index - 1][cell_index + 1] in ('.', '\\', '/')):
                     row[cell_index] = '/'
     return ascii_table
+
+def find_complements(seq_a, seq_b):
+    """ TODO: write docstring """
+    pass
