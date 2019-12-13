@@ -1,5 +1,6 @@
-from dotplot import (get_lines_from_file, get_sequence_from_fasta_lines, create_matches_table, filter_matches, ascii_filter, find_palindromes, create_complements_table) 
 from unittest.mock import patch
+
+from dotplot import get_lines_from_file, get_sequence_from_fasta_lines, create_matches_table, filter_matches, ascii_filter, find_palindromes, create_complements_table
 
 def mocked_get_lines_from_file(contents):
     lines = contents.splitlines()

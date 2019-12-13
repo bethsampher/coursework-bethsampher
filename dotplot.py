@@ -2,6 +2,7 @@
 """
 TODO: write docstring
 """
+import argparse
 
 def get_lines_from_file(filename):
     """ Returns list of lines read from given file (filename) """
@@ -96,3 +97,37 @@ def create_complements_table(seq_a, seq_b):
                 row.append(' ')
         table.append(row)
     return find_palindromes(table)
+
+def print_dotplot(seq_a, seq_b, table):
+    """ TODO: write docstring """
+    print('  ' + seq_b)
+    print(' +' + len(seq_b) * '-')
+    for base_a, row in zip(seq_a, table):
+        print(base_a + '|' + ''.join(row))
+
+def main():
+    """ TODO: write docstring """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file_1')
+    parser.add_argument('file_2')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-f', '--filter', action='store_true')
+    group.add_argument('-a', '--ascii', action='store_true')
+    group.add_argument('-p', '--palindrome', action='store_true')
+    group.add_argument('-c', '--complements', action='store_true')
+    args = parser.parse_args()
+    seq_a = get_sequence_from_fasta_lines(get_lines_from_file(args.file_1))
+    seq_b = get_sequence_from_fasta_lines(get_lines_from_file(args.file_2))
+    table = create_matches_table(seq_a, seq_b)
+    if args.complements:
+        table = create_complements_table(seq_a, seq_b)
+    elif args.filter:
+        table = filter_matches(table)
+    elif args.ascii:
+        table = ascii_filter(table)
+    elif args.palindrome:
+        table = find_palindromes(table)
+    print_dotplot(seq_a, seq_b, table)
+
+if __name__ == '__main__':
+    main()
