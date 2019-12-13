@@ -4,11 +4,10 @@ TODO: write docstring
 """
 import argparse
 
-def get_lines_from_file(filename):
+def get_lines_from_file(file_):
     """ Returns list of lines read from given file (filename) """
-    with open(filename) as file:
-        contents = file.read()
-        lines = contents.splitlines()
+    contents = file_.read()
+    lines = contents.splitlines()
     return lines
 
 def get_sequence_from_fasta_lines(lines):
@@ -108,8 +107,8 @@ def print_dotplot(seq_a, seq_b, table):
 def main():
     """ TODO: write docstring """
     parser = argparse.ArgumentParser()
-    parser.add_argument('file_1')
-    parser.add_argument('file_2')
+    parser.add_argument('file_1', type=argparse.FileType('r'))
+    parser.add_argument('file_2', type=argparse.FileType('r'))
     group = parser.add_mutually_exclusive_group()
     group.add_argument('-f', '--filter', action='store_true')
     group.add_argument('-a', '--ascii', action='store_true')
