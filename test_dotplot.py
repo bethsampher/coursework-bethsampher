@@ -23,6 +23,10 @@ def test_check_fasta_lines_correct():
     lines = ['>ID', 'ATCG']
     assert check_fasta_lines(lines) == True
 
+def test_check_fasta_lines_empty():
+    lines = []
+    assert check_fasta_lines(lines) == False
+
 def test_check_fasta_lines_lowercase():
     lines = ['>ID', 'atcg']
     assert check_fasta_lines(lines) == False

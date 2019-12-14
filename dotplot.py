@@ -12,7 +12,16 @@ def get_lines_from_file(file_):
 
 def check_fasta_lines(lines):
     """ TODO: write docstring """
-    pass
+    if not lines:
+        return False
+    for line in lines:
+        if len(line) == 0:
+            return False
+        if (line[0] != '>') and (line.islower()):
+            return False
+    if lines[0][0] != '>':
+        return False
+    return True
 
 def get_sequence_from_fasta_lines(lines):
     """ Returns first sequence from list of file lines (lines), based on FASTA format """
