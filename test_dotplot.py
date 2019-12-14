@@ -137,7 +137,7 @@ def test_find_palindromes():
 
 def test_create_complements_table():
     seq_a = 'GGTCATTCAGGA'
-    seq_b = 'AGGATCAAAC'
+    seq_b = 'AGGAUCAAAC'
     assert create_complements_table(seq_a, seq_b) == [
             [' ', ' ', ' ', ' ', ' ', '.', ' ', ' ', ' ', '.'],
             [' ', ' ', ' ', ' ', ' ', '\\', ' ', ' ', ' ', '/'],

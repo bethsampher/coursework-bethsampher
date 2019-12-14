@@ -90,7 +90,7 @@ def create_complements_table(seq_a, seq_b):
     for base_a in seq_a:
         row = []
         for base_b in seq_b:
-            if ((base_a, base_b) in (('G', 'C'), ('C', 'G'))) or ((base_a, base_b) in (('A', 'T'), ('T', 'A'))):
+            if (base_a, base_b) in (('G', 'C'), ('C', 'G'), ('A', 'T'), ('T', 'A'), ('A', 'U'), ('U', 'A')):
                 row.append('C')
             else:
                 row.append(' ')
