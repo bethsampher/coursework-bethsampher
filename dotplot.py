@@ -99,31 +99,30 @@ def find_palindromes(table):
                     row[cell_index] = '/'
     return ascii_table
 
-def create_complements_table(seq_a, seq_b):
+def create_complement_table(seq_a, seq_b):
     """ TODO: write docstring """
     table = []
     for base_a in seq_a:
         row = []
         for base_b in seq_b:
             if (base_a, base_b) in (('G', 'C'), ('C', 'G'), ('A', 'T'), ('T', 'A'), ('A', 'U'), ('U', 'A')):
-                row.append('C')
+                row.append('X')
             else:
                 row.append(' ')
         table.append(row)
-    return find_palindromes(table)
+    return table
 
 def parse_command_line_args():
     """ TODO: write docstring """
     parser = argparse.ArgumentParser()
     parser.add_argument('file_a', type=argparse.FileType('r'))
     parser.add_argument('file_b', type=argparse.FileType('r'))
+    parser.add_argument('-c', '--complement', action='store_true')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('-f', '--filter', action='store_true')
     group.add_argument('-a', '--ascii', action='store_true')
     group.add_argument('-p', '--palindrome', action='store_true')
-    group.add_argument('-c', '--complements', action='store_true')
-    args = parser.parse_args()
-    return (args.file_a, args.file_b, args.filter, args.ascii, args.palindrome, args.complements)
+    return parser.parse_args()
 
 def print_dotplot(seq_a, seq_b, table):
     """ TODO: write docstring """
@@ -134,19 +133,20 @@ def print_dotplot(seq_a, seq_b, table):
 
 def main():
     """ TODO: write docstring """
-    file_a, file_b, filter_, ascii_, palindrome, complements = parse_command_line_args()
-    seq_a = get_sequence_from_fasta_lines(get_lines_from_file(file_a))
-    seq_b = get_sequence_from_fasta_lines(get_lines_from_file(file_b))
+    args = parse_command_line_args()
+    seq_a = get_sequence_from_fasta_lines(get_lines_from_file(args.file_a))
+    seq_b = get_sequence_from_fasta_lines(get_lines_from_file(args.file_b))
     if not (seq_a and seq_b):
         sys.exit('Invalid FASTA file')
-    table = create_matches_table(seq_a, seq_b)
-    if complements:
-        table = create_complements_table(seq_a, seq_b)
-    elif filter_:
+    if args.complement:
+        table = create_complement_table(seq_a, seq_b)
+    else:
+        table = create_matches_table(seq_a, seq_b)
+    if args.filter:
         table = filter_matches(table)
-    elif ascii_:
+    elif args.ascii:
         table = ascii_filter(table)
-    elif palindrome:
+    elif args.palindrome:
         table = find_palindromes(table)
     print_dotplot(seq_a, seq_b, table)
 

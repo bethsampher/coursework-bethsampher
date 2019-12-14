@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from dotplot import get_lines_from_file, check_fasta_lines, get_sequence_from_fasta_lines, create_matches_table, filter_matches, ascii_filter, find_palindromes, create_complements_table
+from dotplot import get_lines_from_file, check_fasta_lines, get_sequence_from_fasta_lines, create_matches_table, filter_matches, ascii_filter, find_palindromes, create_complement_table
 
 def mocked_get_lines_from_file(contents):
     lines = contents.splitlines()
@@ -155,20 +155,20 @@ def test_find_palindromes():
             ['/', ' ', ' ', '\\', ' ', ' ', '.', '.', '.', ' ']
             ]
 
-def test_create_complements_table():
+def test_create_complement_table():
     seq_a = 'GGTCATTCAGGA'
     seq_b = 'AGGAUCAAAC'
-    assert create_complements_table(seq_a, seq_b) == [
-            [' ', ' ', ' ', ' ', ' ', '.', ' ', ' ', ' ', '.'],
-            [' ', ' ', ' ', ' ', ' ', '\\', ' ', ' ', ' ', '/'],
-            ['\\', ' ', ' ', '/', ' ', ' ', '\\', '.', '/', ' '],
-            [' ', '\\', '/', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-            [' ', ' ', ' ', ' ', '/', ' ', ' ', ' ', ' ', ' '],
-            ['.', ' ', ' ', '/', ' ', ' ', '\\', '\\', '/', ' '],
-            ['\\', ' ', ' ', '/', ' ', ' ', '/', '\\', '\\', ' '],
-            [' ', '\\', '/', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-            [' ', ' ', ' ', ' ', '\\', ' ', ' ', ' ', ' ', ' '],
-            [' ', ' ', ' ', ' ', ' ', '\\', ' ', ' ', ' ', '.'],
-            [' ', ' ', ' ', ' ', ' ', '/', ' ', ' ', ' ', '.'],
-            [' ', ' ', ' ', ' ', '/', ' ', ' ', ' ', ' ', ' '],
+    assert create_complement_table(seq_a, seq_b) == [
+            [' ', ' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', 'X'],
+            [' ', ' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', 'X'],
+            ['X', ' ', ' ', 'X', ' ', ' ', 'X', 'X', 'X', ' '],
+            [' ', 'X', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' '],
+            ['X', ' ', ' ', 'X', ' ', ' ', 'X', 'X', 'X', ' '],
+            ['X', ' ', ' ', 'X', ' ', ' ', 'X', 'X', 'X', ' '],
+            [' ', 'X', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', 'X'],
+            [' ', ' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', 'X'],
+            [' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' '],
             ]
