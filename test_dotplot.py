@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from dotplot import get_lines_from_file, get_sequence_from_fasta_lines, create_matches_table, filter_matches, ascii_filter, find_palindromes, create_complements_table
+from dotplot import get_lines_from_file, check_fasta_lines, get_sequence_from_fasta_lines, create_matches_table, filter_matches, ascii_filter, find_palindromes, create_complements_table
 
 def mocked_get_lines_from_file(contents):
     lines = contents.splitlines()
@@ -18,6 +18,22 @@ with patch('dotplot.get_lines_from_file', side_effect=mocked_get_lines_from_file
     def test_get_lines_from_file_with_multiple_lines():
         multiline_string = 'This is the first line\nThis is the second line\nThis is the third line'
         assert get_lines_from_file(multiline_string) == ['This is the first line', 'This is the second line', 'This is the third line']
+
+def test_check_fasta_lines_correct():
+    lines = ['>ID', 'ATCG']
+    assert check_fasta_lines(lines) == True
+
+def test_check_fasta_lines_lowercase():
+    lines = ['>ID', 'atcg']
+    assert check_fasta_lines(lines) == False
+
+def test_check_fasta_lines_no_id():
+    lines = ['ID', 'ATCG']
+    assert check_fasta_lines(lines) == False
+
+def test_check_fasta_lines_blank_line():
+    lines = ['>ID', '']
+    assert check_fasta_lines(lines) == False
 
 def test_get_sequence_from_fasta_lines_single():
     lines = ['>ID', 'ATCG']

@@ -10,6 +10,10 @@ def get_lines_from_file(file_):
     lines = contents.splitlines()
     return lines
 
+def check_fasta_lines(lines):
+    """ TODO: write docstring """
+    pass
+
 def get_sequence_from_fasta_lines(lines):
     """ Returns first sequence from list of file lines (lines), based on FASTA format """
     sequence = ''
