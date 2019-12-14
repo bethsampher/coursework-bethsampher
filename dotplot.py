@@ -3,6 +3,7 @@
 TODO: write docstring
 """
 import argparse
+import sys
 
 def get_lines_from_file(file_):
     """ Returns list of lines read from given file (filename) """
@@ -26,11 +27,12 @@ def check_fasta_lines(lines):
 def get_sequence_from_fasta_lines(lines):
     """ Returns first sequence from list of file lines (lines), based on FASTA format """
     sequence = ''
-    for line in lines[1:]:
-        if line[0] == '>':
-            break
-        else:
-            sequence += line
+    if check_fasta_lines(lines):
+        for line in lines[1:]:
+            if line[0] == '>':
+                break
+            else:
+                sequence += line
     return sequence
 
 def create_matches_table(seq_a, seq_b):
@@ -110,6 +112,19 @@ def create_complements_table(seq_a, seq_b):
         table.append(row)
     return find_palindromes(table)
 
+def parse_command_line_args():
+    """ TODO: write docstring """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file_a', type=argparse.FileType('r'))
+    parser.add_argument('file_b', type=argparse.FileType('r'))
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-f', '--filter', action='store_true')
+    group.add_argument('-a', '--ascii', action='store_true')
+    group.add_argument('-p', '--palindrome', action='store_true')
+    group.add_argument('-c', '--complements', action='store_true')
+    args = parser.parse_args()
+    return (args.file_a, args.file_b, args.filter, args.ascii, args.palindrome, args.complements)
+
 def print_dotplot(seq_a, seq_b, table):
     """ TODO: write docstring """
     print('  ' + seq_b)
@@ -119,25 +134,19 @@ def print_dotplot(seq_a, seq_b, table):
 
 def main():
     """ TODO: write docstring """
-    parser = argparse.ArgumentParser()
-    parser.add_argument('file_1', type=argparse.FileType('r'))
-    parser.add_argument('file_2', type=argparse.FileType('r'))
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('-f', '--filter', action='store_true')
-    group.add_argument('-a', '--ascii', action='store_true')
-    group.add_argument('-p', '--palindrome', action='store_true')
-    group.add_argument('-c', '--complements', action='store_true')
-    args = parser.parse_args()
-    seq_a = get_sequence_from_fasta_lines(get_lines_from_file(args.file_1))
-    seq_b = get_sequence_from_fasta_lines(get_lines_from_file(args.file_2))
+    file_a, file_b, filter_, ascii_, palindrome, complements = parse_command_line_args()
+    seq_a = get_sequence_from_fasta_lines(get_lines_from_file(file_a))
+    seq_b = get_sequence_from_fasta_lines(get_lines_from_file(file_b))
+    if not (seq_a and seq_b):
+        sys.exit('Invalid FASTA file')
     table = create_matches_table(seq_a, seq_b)
-    if args.complements:
+    if complements:
         table = create_complements_table(seq_a, seq_b)
-    elif args.filter:
+    elif filter_:
         table = filter_matches(table)
-    elif args.ascii:
+    elif ascii_:
         table = ascii_filter(table)
-    elif args.palindrome:
+    elif palindrome:
         table = find_palindromes(table)
     print_dotplot(seq_a, seq_b, table)
 
