@@ -112,6 +112,10 @@ def create_complement_table(seq_a, seq_b):
         table.append(row)
     return table
 
+def merge_tables(table_1, table_2):
+    """ TODO: write docstring """
+    pass
+
 def parse_command_line_args():
     """ TODO: write docstring """
     parser = argparse.ArgumentParser()
