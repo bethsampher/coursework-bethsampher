@@ -114,7 +114,19 @@ def create_complement_table(seq_a, seq_b):
 
 def merge_tables(table_1, table_2):
     """ TODO: write docstring """
-    pass
+    merged_table = []
+    for row_1, row_2 in zip(table_1, table_2):
+        merged_row = []
+        for cell_1, cell_2 in zip(row_1, row_2):
+            if cell_1  == cell_2:
+                merged_row.append(cell_1)
+            else:
+                if cell_1 == '.':
+                    merged_row.append(cell_2)
+                else:
+                    merged_row.append(cell_1.upper())
+        merged_table.append(merged_row)
+    return merged_table
 
 def parse_command_line_args():
     """ TODO: write docstring """
