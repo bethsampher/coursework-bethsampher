@@ -4,6 +4,7 @@ TODO: write docstring
 """
 import argparse
 import sys
+from copy import deepcopy
 
 def get_lines_from_file(file_):
     """ Returns list of lines read from given file (filename) """
@@ -68,36 +69,33 @@ def filter_matches(table):
                 row[cell_index] = cell.lower()
     return table
 
-def ascii_filter(table):
+def ascii_filter(table, slash):
     """ TODO: write docstring """
-    filtered_table = filter_matches(table)
-    for row in filtered_table:
+    for row in table:
         for cell_index, cell in enumerate(row):
             if cell.strip().isupper():
-                row[cell_index] = '\\'
+                row[cell_index] = slash
             elif cell.strip().islower():
                 row[cell_index] = '.'
-    return filtered_table
+    return table
 
 def find_palindromes(table):
     """ TODO: write docstring """
-    ascii_table = ascii_filter(table)
-    for row_index, row in enumerate(ascii_table):
+    for row_index, row in enumerate(table):
         for cell_index, cell in enumerate(row):
-            if cell == '.':
-                if (row_index == 0) and (cell_index == 0):
-                    pass
-                elif (row_index + 1 == len(ascii_table)) and (cell_index + 1 == len(row)):
-                    pass
-                elif (row_index == 0) or (cell_index + 1 == len(row)):
-                    if ascii_table[row_index + 1][cell_index - 1] in ('.', '\\', '/'):
-                        row[cell_index] = '/'
-                elif (row_index + 1 == len(ascii_table)) or (cell_index == 0):
-                    if ascii_table[row_index - 1][cell_index + 1] in ('.', '\\', '/'):
-                        row[cell_index] = '/'
-                elif (ascii_table[row_index + 1][cell_index - 1] in ('.', '\\', '/')) or (ascii_table[row_index - 1][cell_index + 1] in ('.', '\\', '/')):
-                    row[cell_index] = '/'
-    return ascii_table
+            if (row_index == 0) and (cell_index == 0):
+                row[cell_index] = cell.lower()
+            elif (row_index + 1 == len(table)) and (cell_index + 1 == len(row)):
+                row[cell_index] = cell.lower()
+            elif (row_index == 0) or (cell_index + 1 == len(row)):
+                if table[row_index + 1][cell_index - 1] == ' ':
+                    row[cell_index] = cell.lower()
+            elif (row_index + 1 == len(table)) or (cell_index == 0):
+                if table[row_index - 1][cell_index + 1] == ' ':
+                    row[cell_index] = cell.lower()
+            elif (table[row_index + 1][cell_index - 1] == ' ') and (table[row_index - 1][cell_index + 1] == ' '):
+                row[cell_index] = cell.lower()
+    return table
 
 def create_complement_table(seq_a, seq_b):
     """ TODO: write docstring """
@@ -118,13 +116,12 @@ def merge_tables(table_1, table_2):
     for row_1, row_2 in zip(table_1, table_2):
         merged_row = []
         for cell_1, cell_2 in zip(row_1, row_2):
-            if cell_1  == cell_2:
+            if cell_1 == cell_2:
                 merged_row.append(cell_1)
-            else:
-                if cell_1 == '.':
+            elif cell_1 == '.':
                     merged_row.append(cell_2)
-                else:
-                    merged_row.append(cell_1.upper())
+            else:
+                merged_row.append(cell_1.upper())
         merged_table.append(merged_row)
     return merged_table
 
@@ -134,10 +131,9 @@ def parse_command_line_args():
     parser.add_argument('file_a', type=argparse.FileType('r'))
     parser.add_argument('file_b', type=argparse.FileType('r'))
     parser.add_argument('-c', '--complement', action='store_true')
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('-f', '--filter', action='store_true')
-    group.add_argument('-a', '--ascii', action='store_true')
-    group.add_argument('-p', '--palindrome', action='store_true')
+    parser.add_argument('-f', '--filter', action='store_true')
+    parser.add_argument('-a', '--ascii', action='store_true')
+    parser.add_argument('-p', '--palindrome', action='store_true')
     return parser.parse_args()
 
 def print_dotplot(seq_a, seq_b, table):
@@ -158,12 +154,23 @@ def main():
         table = create_complement_table(seq_a, seq_b)
     else:
         table = create_matches_table(seq_a, seq_b)
-    if args.filter:
-        table = filter_matches(table)
-    elif args.ascii:
-        table = ascii_filter(table)
+    if args.filter and args.palindrome:
+        filtered_table = filter_matches(deepcopy(table))
+        palindrome_table = find_palindromes(deepcopy(table))
+        if args.ascii:
+            ascii_filter(filtered_table, '\\')
+            ascii_filter(palindrome_table, '/')
+        table = merge_tables(filtered_table, palindrome_table)
+    elif args.filter:
+        filter_matches(table)
+        if args.ascii:
+            ascii_filter(table, '\\')
     elif args.palindrome:
-        table = find_palindromes(table)
+        find_palindromes(table)
+        if args.ascii:
+            ascii_filter(table, '/')
+    elif args.ascii:
+        parser.error('--ascii requires --filter or --palindrome')
     print_dotplot(seq_a, seq_b, table)
 
 if __name__ == '__main__':
