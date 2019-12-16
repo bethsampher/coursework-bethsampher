@@ -11,11 +11,13 @@ import argparse
 import sys
 from copy import deepcopy
 
+
 def get_lines_from_file(file_):
     """Returns list of lines read from given file"""
     contents = file_.read()
     lines = contents.splitlines()
     return lines
+
 
 def check_fasta_lines(lines):
     """Returns true if given file lines are in FASTA format, false if not"""
@@ -30,6 +32,7 @@ def check_fasta_lines(lines):
         return False
     return True
 
+
 def get_sequence_from_fasta_lines(lines):
     """ Returns first sequence from given list of file lines
 
@@ -40,9 +43,9 @@ def get_sequence_from_fasta_lines(lines):
         for line in lines[1:]:
             if line[0] == '>':
                 break
-            else:
-                sequence += line
+            sequence += line
     return sequence
+
 
 def create_matches_table(seq_a, seq_b):
     """Returns a list of lists of places where the sequences match
@@ -62,6 +65,7 @@ def create_matches_table(seq_a, seq_b):
         table.append(row)
     return table
 
+
 def filter_matches(table):
     """Returns a filtered list of lists of matches
 
@@ -80,9 +84,11 @@ def filter_matches(table):
             elif (row_index + 1 == len(table)) or (cell_index + 1 == len(row)):
                 if table[row_index - 1][cell_index - 1] == ' ':
                     row[cell_index] = cell.lower()
-            elif (table[row_index + 1][cell_index + 1] == ' ') and (table[row_index - 1][cell_index - 1] == ' '):
+            elif (table[row_index + 1][cell_index + 1] == ' ') and (
+                    table[row_index - 1][cell_index - 1] == ' '):
                 row[cell_index] = cell.lower()
     return table
+
 
 def ascii_filter(filtered_table, slash):
     """Returns a list of lists of matches filtered with symbols
@@ -99,6 +105,7 @@ def ascii_filter(filtered_table, slash):
                 row[cell_index] = '.'
     return filtered_table
 
+
 def find_palindromes(table):
     """Returns a list of lists of matches filtered to show palindromes
 
@@ -109,7 +116,8 @@ def find_palindromes(table):
         for cell_index, cell in enumerate(row):
             if (row_index == 0) and (cell_index == 0):
                 row[cell_index] = cell.lower()
-            elif (row_index + 1 == len(table)) and (cell_index + 1 == len(row)):
+            elif (row_index + 1 == len(table)) and (
+                    cell_index + 1 == len(row)):
                 row[cell_index] = cell.lower()
             elif (row_index == 0) or (cell_index + 1 == len(row)):
                 if table[row_index + 1][cell_index - 1] == ' ':
@@ -117,12 +125,14 @@ def find_palindromes(table):
             elif (row_index + 1 == len(table)) or (cell_index == 0):
                 if table[row_index - 1][cell_index + 1] == ' ':
                     row[cell_index] = cell.lower()
-            elif (table[row_index + 1][cell_index - 1] == ' ') and (table[row_index - 1][cell_index + 1] == ' '):
+            elif (table[row_index + 1][cell_index - 1] == ' ') and (
+                    table[row_index - 1][cell_index + 1] == ' '):
                 row[cell_index] = cell.lower()
     return table
 
+
 def create_complement_table(seq_a, seq_b):
-    """Returns a list of lists of places where the sequences complement each other
+    """Returns a list of lists of places where sequences complement each other
 
     Each list is formed by comparing each item in seq_a with all the items in
     seq_b. DNA/RNA complements appear in the list as 'X's and non-complements
@@ -132,12 +142,14 @@ def create_complement_table(seq_a, seq_b):
     for base_a in seq_a:
         row = []
         for base_b in seq_b:
-            if (base_a, base_b) in (('G', 'C'), ('C', 'G'), ('A', 'T'), ('T', 'A'), ('A', 'U'), ('U', 'A')):
+            if (base_a, base_b) in (('G', 'C'), ('C', 'G'), ('A', 'T')
+                                    , ('T', 'A'), ('A', 'U'), ('U', 'A')):
                 row.append('X')
             else:
                 row.append(' ')
         table.append(row)
     return table
+
 
 def merge_tables(table_1, table_2):
     """Returns a merged filtered and palindrome list of lists
@@ -153,31 +165,35 @@ def merge_tables(table_1, table_2):
             if cell_1 == cell_2:
                 merged_row.append(cell_1)
             elif cell_1 == '.':
-                    merged_row.append(cell_2)
+                merged_row.append(cell_2)
             else:
                 merged_row.append(cell_1.upper())
         merged_table.append(merged_row)
     return merged_table
 
+
 def parse_command_line_args():
     """Parses options from the command line, returns args"""
     description = ('Prints dotplot based on matches in sequences from 2 '
-            'FASTA files. Abnormal exit if files not in correct format')
+                   'FASTA files. Abnormal exit if files not in correct format')
     parser = argparse.ArgumentParser(description=description)
     help_msg = 'first FASTA file'
     parser.add_argument('file_a', type=argparse.FileType('r'), help=help_msg)
     help_msg = 'second FASTA file'
     parser.add_argument('file_b', type=argparse.FileType('r'), help=help_msg)
     help_msg = 'instead of matches, finds DNA/RNA complements in sequences'
-    parser.add_argument('-c', '--complement', action='store_true', help=help_msg)
+    parser.add_argument('-c', '--complement', action='store_true'
+                        , help=help_msg)
     help_msg = 'converts fowards lone matches to lowercase'
     parser.add_argument('-f', '--filter', action='store_true', help=help_msg)
     help_msg = ('converts lone matches to dots and joined matches to slashes, '
-    'must be used with --filter or --palindrome')
+                'must be used with --filter or --palindrome')
     parser.add_argument('-a', '--ascii', action='store_true', help=help_msg)
     help_msg = 'converts backwards lone matches to lowercase'
-    parser.add_argument('-p', '--palindrome', action='store_true', help=help_msg)
-    return parser.parse_args()
+    parser.add_argument('-p', '--palindrome', action='store_true'
+                        , help=help_msg)
+    return parser
+
 
 def print_dotplot(seq_a, seq_b, table):
     """Prints a dotplot
@@ -191,9 +207,11 @@ def print_dotplot(seq_a, seq_b, table):
     for base_a, row in zip(seq_a, table):
         print(base_a + '|' + ''.join(row))
 
+
 def main():
     """Function invoked when this is run as a script"""
-    args = parse_command_line_args()
+    parser = parse_command_line_args()
+    args = parser.parse_args()
     seq_a = get_sequence_from_fasta_lines(get_lines_from_file(args.file_a))
     seq_b = get_sequence_from_fasta_lines(get_lines_from_file(args.file_b))
     if not (seq_a and seq_b):
@@ -220,6 +238,7 @@ def main():
     elif args.ascii:
         parser.error('--ascii requires --filter or --palindrome')
     print_dotplot(seq_a, seq_b, table)
+
 
 if __name__ == '__main__':
     main()
