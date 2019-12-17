@@ -1,4 +1,4 @@
-#### Dotplot script
+# Dotplot script
 
 A dotplot displays similarities between 2 sequences. This is useful in biology, for example when comparing DNA or RNA. One sequence goes along the horizontal axis and the other along the vertical:
 
