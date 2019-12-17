@@ -215,7 +215,7 @@ def main():
     seq_a = get_sequence_from_fasta_lines(get_lines_from_file(args.file_a))
     seq_b = get_sequence_from_fasta_lines(get_lines_from_file(args.file_b))
     if not (seq_a and seq_b):
-        sys.exit('Invalid FASTA file')
+        sys.exit('Error: invalid FASTA file')
     if args.complement:
         table = create_complement_table(seq_a, seq_b)
     else:
