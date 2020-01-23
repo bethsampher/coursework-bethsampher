@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/ARU-Bioinf-IBDS/coursework-bethsampher.svg?token=PqzzQqKvs6pgNMx1SnYh&branch=master)](https://travis-ci.com/ARU-Bioinf-IBDS/coursework-bethsampher)
+
 # Dotplot script
 
 A dotplot displays similarities between 2 sequences. This is useful in biology, for example when comparing protein sequences, DNA or RNA. One sequence goes along the horizontal axis and the other along the vertical:
