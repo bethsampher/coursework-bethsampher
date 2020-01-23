@@ -24,7 +24,7 @@ def check_fasta_lines(lines):
     if not lines:
         return False
     for line in lines:
-        if len(line) == 0:
+        if not line:
             return False
         if (line[0] != '>') and (line.islower()):
             return False
@@ -47,19 +47,19 @@ def get_sequence_from_fasta_lines(lines):
     return sequence
 
 
-def create_matches_table(seq_a, seq_b):
+def create_matches_table(seq_y, seq_x):
     """Returns a list of lists of places where the sequences match
 
-    Each list is formed by comparing each item in seq_a with all the
-    items in seq_b. Matches appear in the list and non-matches
+    Each list is formed by comparing each item in seq_y with all the
+    items in seq_x. Matches appear in the list and non-matches
     appear as whitespaces
     """
     table = []
-    for base_a in seq_a:
+    for base_y in seq_y:
         row = []
-        for base_b in seq_b:
-            if base_a == base_b:
-                row.append(base_a)
+        for base_x in seq_x:
+            if base_y == base_x:
+                row.append(base_y)
             else:
                 row.append(' ')
         table.append(row)
@@ -131,19 +131,19 @@ def find_palindromes(table):
     return table
 
 
-def create_complement_table(seq_a, seq_b):
+def create_complement_table(seq_y, seq_x):
     """Returns a list of lists of places where sequences complement each other
 
-    Each list is formed by comparing each item in seq_a with all the items in
-    seq_b. DNA/RNA complements appear in the list as 'X's and non-complements
+    Each list is formed by comparing each item in seq_y with all the items in
+    seq_x. DNA/RNA complements appear in the list as 'X's and non-complements
     appear as whitespaces
     """
     table = []
-    for base_a in seq_a:
+    for base_y in seq_y:
         row = []
-        for base_b in seq_b:
-            if (base_a, base_b) in (('G', 'C'), ('C', 'G'), ('A', 'T')
-                                    , ('T', 'A'), ('A', 'U'), ('U', 'A')):
+        for base_x in seq_x:
+            if (base_y, base_x) in (('G', 'C'), ('C', 'G'), ('A', 'T'),
+                                    ('T', 'A'), ('A', 'U'), ('U', 'A')):
                 row.append('X')
             else:
                 row.append(' ')
@@ -178,48 +178,48 @@ def parse_command_line_args():
                    'FASTA files. Abnormal exit if files not in correct format')
     parser = argparse.ArgumentParser(description=description)
     help_msg = 'first FASTA file'
-    parser.add_argument('file_a', type=argparse.FileType('r'), help=help_msg)
+    parser.add_argument('file_y', type=argparse.FileType('r'), help=help_msg)
     help_msg = 'second FASTA file'
-    parser.add_argument('file_b', type=argparse.FileType('r'), help=help_msg)
+    parser.add_argument('file_x', type=argparse.FileType('r'), help=help_msg)
     help_msg = 'instead of matches, finds DNA/RNA complements in sequences'
-    parser.add_argument('-c', '--complement', action='store_true'
-                        , help=help_msg)
+    parser.add_argument('-c', '--complement', action='store_true',
+                        help=help_msg)
     help_msg = 'converts fowards lone matches to lowercase'
     parser.add_argument('-f', '--filter', action='store_true', help=help_msg)
     help_msg = ('converts lone matches to dots and joined matches to slashes, '
                 'must be used with --filter or --palindrome')
     parser.add_argument('-a', '--ascii', action='store_true', help=help_msg)
     help_msg = 'converts backwards lone matches to lowercase'
-    parser.add_argument('-p', '--palindrome', action='store_true'
-                        , help=help_msg)
+    parser.add_argument('-p', '--palindrome', action='store_true',
+                        help=help_msg)
     return parser
 
 
-def print_dotplot(seq_a, seq_b, table):
+def print_dotplot(seq_y, seq_x, table):
     """Prints a dotplot
 
     Given the 2 sequences and the
     corresponding list of lists of
     matches
     """
-    print('  ' + seq_b)
-    print(' +' + len(seq_b) * '-')
-    for base_a, row in zip(seq_a, table):
-        print(base_a + '|' + ''.join(row))
+    print('  ' + seq_x)
+    print(' +' + len(seq_x) * '-')
+    for base_y, row in zip(seq_y, table):
+        print(base_y + '|' + ''.join(row))
 
 
 def main():
     """Function invoked when this is run as a script"""
     parser = parse_command_line_args()
     args = parser.parse_args()
-    seq_a = get_sequence_from_fasta_lines(get_lines_from_file(args.file_a))
-    seq_b = get_sequence_from_fasta_lines(get_lines_from_file(args.file_b))
-    if not (seq_a and seq_b):
+    seq_y = get_sequence_from_fasta_lines(get_lines_from_file(args.file_y))
+    seq_x = get_sequence_from_fasta_lines(get_lines_from_file(args.file_x))
+    if not (seq_y and seq_x):
         sys.exit('Error: invalid FASTA file')
     if args.complement:
-        table = create_complement_table(seq_a, seq_b)
+        table = create_complement_table(seq_y, seq_x)
     else:
-        table = create_matches_table(seq_a, seq_b)
+        table = create_matches_table(seq_y, seq_x)
     if args.filter and args.palindrome:
         filtered_table = filter_matches(deepcopy(table))
         palindrome_table = find_palindromes(deepcopy(table))
@@ -237,7 +237,7 @@ def main():
             ascii_filter(table, '/')
     elif args.ascii:
         parser.error('--ascii requires --filter or --palindrome')
-    print_dotplot(seq_a, seq_b, table)
+    print_dotplot(seq_y, seq_x, table)
 
 
 if __name__ == '__main__':

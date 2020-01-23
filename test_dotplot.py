@@ -25,15 +25,17 @@ with patch('dotplot.get_lines_from_file',
     def test_get_lines_from_file_with_one_line():
         """Test for get_lines_from_file"""
         one_line_string = 'This is the first line'
-        assert get_lines_from_file(one_line_string) == ['This is the first line']
+        assert get_lines_from_file(one_line_string) == [
+            'This is the first line']
 
     def test_get_lines_from_file_with_multiple_lines():
         """Test for get_lines_from_file"""
         multiline_string = ('This is the first line\nThis is the second line\n'
                             'This is the third line')
-        assert get_lines_from_file(multiline_string) == ['This is the first line'
-                                                         , 'This is the second line'
-                                                         , 'This is the third line']
+        assert get_lines_from_file(multiline_string) == [
+            'This is the first line',
+            'This is the second line',
+            'This is the third line']
 
 
 def test_check_fasta_lines_correct():
@@ -80,9 +82,9 @@ def test_get_sequence_from_fasta_lines_with_concatenation():
 
 def test_create_matches_table():
     """Test for create_matches_table"""
-    seq_a = 'GGTCATTCAGGA'
-    seq_b = 'AGGATCAAAC'
-    assert create_matches_table(seq_a, seq_b) == [
+    seq_y = 'GGTCATTCAGGA'
+    seq_x = 'AGGATCAAAC'
+    assert create_matches_table(seq_y, seq_x) == [
         [' ', 'G', 'G', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
         [' ', 'G', 'G', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', 'T', ' ', ' ', ' ', ' ', ' '],
@@ -228,9 +230,9 @@ def test_find_palindromes():
 
 def test_create_complement_table():
     """Test for create_complement_table"""
-    seq_a = 'GGTCATTCAGGA'
-    seq_b = 'AGGAUCAAAC'
-    assert create_complement_table(seq_a, seq_b) == [
+    seq_y = 'GGTCATTCAGGA'
+    seq_x = 'AGGAUCAAAC'
+    assert create_complement_table(seq_y, seq_x) == [
         [' ', ' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', 'X'],
         [' ', ' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', 'X'],
         ['X', ' ', ' ', 'X', ' ', ' ', 'X', 'X', 'X', ' '],
